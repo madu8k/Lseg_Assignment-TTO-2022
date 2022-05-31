@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://momentjs.com/downloads/moment.js" type="text/javascript"></script>
+    <script>
+        function myscript() {
+            var currentTime = new Date();
+            document.getElementById('server').innerHTML = moment(currentTime).format('DD/MM/yyyy hh:mm:ss a');
+            setTimeout(myscript, 1000); // uncomment this line for updating time.
+        }
+        function showClock() {
+            let password = prompt("Please enter password", "");
+            let text;
+            if (password == null || password == "") {
+                text = "User cancelled the prompt.";
+            } else if (password == '1234') {
+                getCurrentTime();
+            } else {
+                alert("Password error");
+            }
+        }
+
+        function getCurrentTime() {
+            // const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const tz = 'America/New_York';
+            fetch("https://worldtimeapi.org/api/timezone/" + tz)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(tz, data.datetime);
+                    document.getElementById('country').innerHTML = tz;
+                    let serverTime = data.datetime;
+                    document.getElementById('local').innerHTML = serverTime;
+
+                });
+            setTimeout(getCurrentTime, 1000);
+        }
+    </script>
+
+</head>
+
+<body onload="myscript()">
+    <p id="server"></p>
+    <button id="showClockButton" onclick="showClock()">Server Clock</button>
+    <p id="country"></p>
+    <p id="local"></p> 
+</body>
+
+</html>
